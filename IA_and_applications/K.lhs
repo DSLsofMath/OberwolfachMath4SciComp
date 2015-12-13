@@ -23,7 +23,7 @@ The Krawczyk method, section 5.1.5.
 >                           fm   =  fms !! 0
 >                           fm'  =  fms !! 1
 >                           fxs  =  fext (var x)
->                           fx'  =  fxs !! 1 
+>                           fx'  =  fxs !! 1
 >                           r    =  rad x
 >                           rr   =  I (-r, r)
 >                           kx   =  (toInterval (m - fm / fm') -

@@ -19,5 +19,3 @@
 
 > cross :: (a -> b, c -> d) -> (a, c) -> (b, d)
 > cross (f, g) (a, c) = (f a, g c)
-
-

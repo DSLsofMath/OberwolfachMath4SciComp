@@ -20,7 +20,7 @@ Finding zeros by bisection, section 5.1.1.
 
 Constructing the tree of intervals examined:
 
-> data Tree a = DeadEnd | Prize a | Node (Tree a) a (Tree a) 
+> data Tree a = DeadEnd | Prize a | Node (Tree a) a (Tree a)
 >               deriving Show
 
 > zeroTree fext tol x  =  if (0 :: Interval) `isIn` x
@@ -35,15 +35,15 @@ Constructing the tree of intervals examined:
 
 > levels t = levels' [t]
 >            where
->            cut DeadEnd = []
->            cut (Prize a) = [a]
->            cut (Node tl a tr) = [a]
->            rest DeadEnd = []
->            rest (Prize a) = []
->            rest (Node tl a tr) = [tl, tr]
+>            cut DeadEnd           = []
+>            cut (Prize a)         = [a]
+>            cut (Node _tl a _tr)  = [a]
+>
+>            rest DeadEnd          = []
+>            rest (Prize _a)       = []
+>            rest (Node tl _a tr)  = [tl, tr]
+>
 >            levels' [] = []
 >            levels' ts = concat (map cut ts) : levels' (concat (map rest ts))
 
 > test'' = levels test'
-
-
