@@ -1,0 +1,13 @@
+These are the modified versions of the applications of interval
+analysis, exposing folds and unfolds and various fusion laws.
+
+IN.lhs         -- interval Newton method
+Z.lhs          -- finding zeros via bisection
+K.lhs          -- Krawczyk method
+O.lhs          -- global optimization via bisection
+OM.lhs         -- global optimization written monadic style
+
+You will still need Util.lhs and AD.lhs to typecheck and compile 
+these programs.
+
+
