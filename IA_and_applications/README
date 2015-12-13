@@ -1,0 +1,14 @@
+These are the files from the presentation of the implementation of
+interval analysis and applications:
+
+IA.lhs         -- implementation of interval analysis
+IN.lhs         -- interval Newton method
+Z.lhs          -- finding zeros via bisection
+K.lhs          -- Krawczyk method
+O.lhs          -- global optimization via bisection
+AD.lhs         -- automatic differentiation (Monday's presentation)
+
+Additionally, there is a small collection of definitions not strictly
+related to any particular example, Util.lhs.  
+
+
