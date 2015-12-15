@@ -6,9 +6,9 @@
 
 References:
 
-  Pavlovici and Escardo: ``Calculus in codinductive form'', 1998
-  McIlroy: ``Power series, power serious'', 1999
-  Tucker: ``Validated Numerics'', 2011
+  * Pavlovici and Escardo: ``Calculus in codinductive form'', 1998
+  * McIlroy: ``Power series, power serious'', 1999
+  * Tucker: ``Validated Numerics'', 2011
 
 In many application, e.g. Newton's method, many optimization methods,
 etc., we need to compute the values of the derivatives of a real
@@ -39,54 +39,52 @@ Having fixed |x0|, we can perform arithmetic operations on |FD a|:
 >   fromInteger n         =  (fromInteger n, 0)
 
 > instance Fractional a => Fractional (FD a) where
->     (f, f') / (g, g')   =  let fdg = f / g in
->                                     (fdg, (f' - fdg * g') / g)
->     fromRational r      = (fromRational r, 0)
+>   (/) (f, f') (g, g') =  let fdg = f / g in
+>                          (fdg, (f' - fdg * g') / g)
+>   fromRational r      =  (fromRational r, 0)
 
 One might expect elementary functions such as |sin| to be treated
-similarly to |con| or |var| above, but that would be a bad idea.
+similarly to |conFD| or |varFD| above, but that would be a bad idea.
 What we need is to extend these functions to operate on values of
 type |FD a|.
 
 > instance Floating a => Floating (FD a) where
->     pi                  =  conFD pi
->     exp (f, f')         =  let e = exp f in (e, f' * e)
->     log (f, f')         =  (log f, f' / f)
->     sqrt (f, f')        =  let sqrtf = sqrt f in
->                            (sqrtf, -0.5 * f' * (1 / sqrtf))
->     (**)                =  undefined -- TODO
->     logBase             =  undefined -- TODO
->     sin (f, f')         =  (sin f, (cos f) * f')
->     cos (f, f')         =  (cos f, (-sin f) * f')
->     tan                 =  undefined -- TODO
->     asin                =  undefined -- TODO
->     acos                =  undefined -- TODO
->     atan                =  undefined -- TODO
->     sinh                =  undefined -- TODO
->     cosh                =  undefined -- TODO
->     tanh                =  undefined -- TODO
->     asinh               =  undefined -- TODO
->     acosh               =  undefined -- TODO
->     atanh               =  undefined -- TODO
+>   pi                  =  conFD pi
+>   exp (f, f')         =  let e = exp f in (e, f' * e)
+>   log (f, f')         =  (log f, f' / f)
+>   sqrt (f, f')        =  let sqrtf = sqrt f in
+>                          (sqrtf, -0.5 * f' * (1 / sqrtf))
+>   (**)                =  undefined -- TODO
+>   logBase             =  undefined -- TODO
+>   sin (f, f')         =  (sin f, (cos f) * f')
+>   cos (f, f')         =  (cos f, (-sin f) * f')
+>   tan                 =  undefined -- TODO
+>   asin                =  undefined -- TODO
+>   acos                =  undefined -- TODO
+>   atan                =  undefined -- TODO
+>   sinh                =  undefined -- TODO
+>   cosh                =  undefined -- TODO
+>   tanh                =  undefined -- TODO
+>   asinh               =  undefined -- TODO
+>   acosh               =  undefined -- TODO
+>   atanh               =  undefined -- TODO
 
 
 > newtonFD :: (Ord a, Floating a) => (FD a -> FD a) -> a -> a -> a
-> newtonFD f tol x  =  if abs (x - x') < tol
->                         then x'
->                         else newtonFD f tol x'
->                      where
->                      (fx, fx')  =  f (varFD x)
->                      x'         =  x - (fx / fx')
+> newtonFD f tol x
+>   | abs (x - x') < tol  =  x'
+>   | otherwise           =  newtonFD f tol x'
+>   where (fx, fx')  =  f (varFD x)
+>         x'         =  x - (fx / fx')
 
 
 > newtonHD :: (Ord a, Floating a) => (HD a -> HD a) -> a -> a -> a
-> newtonHD f tol x  =  if abs (x - x') < tol
->                         then x'
->                         else newtonHD f tol x'
->                      where
->                      fs         =  f (var x)
->                      (fx, fx')  =  (fs!!0, fs!!1)
->                      x'         =  x - (fx / fx')
+> newtonHD f tol x
+>   | abs (x - x') < tol  =  x'
+>   | otherwise           =  newtonHD f tol x'
+>   where fs         =  f (var x)
+>         (fx, fx')  =  (fs!!0, fs!!1)
+>         x'         =  x - (fx / fx')
 
 > foo x = sin (exp x + 1)
 > test1 = newtonFD foo (1e-10) 0
@@ -95,13 +93,13 @@ type |FD a|.
 
 This works very well, and can be applied with no changes to any
 suitable type (instance of |Floating|), including intervals.  But it has
-a disadvantage: we cannot use this machinery to computer higher-order
+a disadvantage: we cannot use this machinery to compute higher-order
 derivatives, such as needed, e.g., for some optimization methods (we
 need the second derivative to check critical points).
 
-We could copy the ideas and work with triples, etc.  A more
-interesting approach, however, is to work with \emph{infinite lists},
-also known as streams.
+We could copy the ideas and work with triples, etc.  A more interesting
+approach, however, is to work with \emph{infinite lists}, also known
+as streams.
 
 > data Stream a = S a (Stream a) deriving Show
 
@@ -138,8 +136,7 @@ or, in Horner form:
 < f x = f0 + (x - x0) * (f1 + (x - x1) * ( ...
 
 > eval x0 x = foldStream h
->             where
->             h fk e = fk + (x - x0) * e
+>   where h fk e = fk + (x - x0) * e
 
 > evalTo n delta = foldr1 (\ fk s -> fk + delta * s) . take n
 
@@ -147,7 +144,7 @@ Since if we have the Taylor expansions of |f| and |g| at |x0| we can
 compute the Taylor expansions of |f + g|, |-f|, |f * g|, we can install
 infinite series as instance of |Num|.  The more interesting of these
 operations is |(*)|.  The point of view usually taken in textbooks
-(including Tucker's ``Validated Numerics'') is that of |Nat -> a|, which
+(including Tucker's "Validated Numerics") is that of |Nat -> a|, which
 encourages the following sort of calculation:
 
 < eval x0 x (fs * gs) = eval x0 x fs * eval x0 x gs
@@ -161,13 +158,12 @@ encourages the following sort of calculation:
 In most cases in which we need the |k|th order derivative of |f|, we
 also need to compute the lower-order derivatives.  In the stream-based
 approach, therefore, we can implement multiplication as a function which
-delivers the stream of all elements of the Taylor expansion of |(f *
-g)|.  For example:
+delivers the stream of all elements of the Taylor expansion of |(f * g)|.
+For example:
 
 < fs * gs  =  map mapRed (zip (inits fs) (map reverse (inits gs)))
-<             where
-<             mapRed (as, bs)  =  foldr mR (zip as bs)
-<             mR (a, b) res    =  a * b + res
+<   where mapRed (as, bs)  =  foldr mR (zip as bs)
+<         mR (a, b) res    =  a * b + res
 
 This corresponds clearly to the formula, but is very inefficient, owing
 to the presence of |reverse|.  We can derive a much more efficient
@@ -206,7 +202,7 @@ point} which satisfies the |data| declaration, which in the case of
 principle is correct, it just doesn't apply to the model we have of
 streams.
 
-The question of the meaning of the Stream |data| declaration and the
+The question of the meaning of the |Stream| |data| declaration and the
 proof methods appropriate to such declarations is going to be discussed
 in later lectures.
 
@@ -253,7 +249,7 @@ that it allows us to define elementary functions by means of the
 differential equations they satisfy.  First, we observe that
 
 > countFrom n = n : countFrom (n+1)
-> diff (f0:fs') =   zipWith (*) fs' (countFrom 1)
+> diff (f0:fs') = zipWith (*) fs' (countFrom 1)
 > integral fs = 0 : zipWith (/) fs  (countFrom 1)
 
 Using |diff| and |integral|, we have:
@@ -264,24 +260,25 @@ Using |diff| and |integral|, we have:
 >           integral ((fromInteger (n + 1)) * pow gs n * diff gs)
 
 > instance (Power a, Floating a) => Floating (HD a) where
->     pi                    =  con pi
->     exp gs @ (g0 : gs')   =  con (exp g0) +
->                              integral (diff gs * exp gs)
->     log                   =  undefined
->     sqrt                  =  undefined
->     (**)                  =  undefined
->     logBase               =  undefined
->     sin gs @ (g0 : gs')   =  con (sin g0) +
->                              integral (diff gs * cos gs)
->     cos gs @ (g0 : gs')   =  con (cos g0) +
->                              integral (-diff gs * sin gs)
->     tan                   =  undefined
->     asin                  =  undefined
->     acos                  =  undefined
->     atan                  =  undefined
->     sinh                  =  undefined
->     cosh                  =  undefined
->     tanh                  =  undefined
->     asinh                 =  undefined
->     acosh                 =  undefined
->     atanh                 =  undefined
+>   pi                    =  con pi
+>   exp gs @ (g0 : gs')   =  con (exp g0) + 
+>                            integral (diff gs * exp gs)
+>   log                   =  undefined
+>   sqrt                  =  undefined
+>   (**)                  =  undefined
+>   logBase               =  undefined
+>   sin gs @ (g0 : gs')   =  con (sin g0) + 
+>                            integral (diff gs * cos gs)
+>   cos gs @ (g0 : gs')   =  con (cos g0) + 
+>                            integral (-diff gs * sin gs)
+>   tan                   =  undefined
+>   asin                  =  undefined
+>   acos                  =  undefined
+>   atan                  =  undefined
+>   sinh                  =  undefined
+>   cosh                  =  undefined
+>   tanh                  =  undefined
+>   asinh                 =  undefined
+>   acosh                 =  undefined
+>   atanh                 =  undefined
+
