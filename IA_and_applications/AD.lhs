@@ -263,21 +263,21 @@ Using |diff| and |integral|, we have:
 >   pi                    =  con pi
 >   exp gs @ (g0 : gs')   =  con (exp g0) +
 >                            integral (diff gs * exp gs)
->   log                   =  undefined
->   sqrt                  =  undefined
->   (**)                  =  undefined
->   logBase               =  undefined
+>   log                   =  undefined -- TODO: exercise
+>   sqrt                  =  undefined -- TODO: exercise
+>   (**)                  =  undefined -- TODO: exercise
+>   logBase               =  undefined -- TODO: exercise
 >   sin gs @ (g0 : gs')   =  con (sin g0) +
 >                            integral (diff gs * cos gs)
 >   cos gs @ (g0 : gs')   =  con (cos g0) +
 >                            integral (-diff gs * sin gs)
->   tan                   =  undefined
->   asin                  =  undefined
->   acos                  =  undefined
->   atan                  =  undefined
->   sinh                  =  undefined
->   cosh                  =  undefined
->   tanh                  =  undefined
->   asinh                 =  undefined
->   acosh                 =  undefined
->   atanh                 =  undefined
+>   tan                   =  undefined -- TODO: exercise
+>   asin                  =  undefined -- TODO: exercise
+>   acos                  =  undefined -- TODO: exercise
+>   atan                  =  undefined -- TODO: exercise
+>   sinh                  =  undefined -- TODO: exercise
+>   cosh                  =  undefined -- TODO: exercise
+>   tanh                  =  undefined -- TODO: exercise
+>   asinh                 =  undefined -- TODO: exercise
+>   acosh                 =  undefined -- TODO: exercise
+>   atanh                 =  undefined -- TODO: exercise
