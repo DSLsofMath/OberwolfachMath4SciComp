@@ -54,20 +54,20 @@ type |FD a|.
 >   log (f, f')         =  (log f, f' / f)
 >   sqrt (f, f')        =  let sqrtf = sqrt f in
 >                          (sqrtf, -0.5 * f' * (1 / sqrtf))
->   (**)                =  undefined -- TODO
->   logBase             =  undefined -- TODO
+>   (**)                =  undefined -- TODO: exercise
+>   logBase             =  undefined -- TODO: exercise
 >   sin (f, f')         =  (sin f, (cos f) * f')
 >   cos (f, f')         =  (cos f, (-sin f) * f')
->   tan                 =  undefined -- TODO
->   asin                =  undefined -- TODO
->   acos                =  undefined -- TODO
->   atan                =  undefined -- TODO
->   sinh                =  undefined -- TODO
->   cosh                =  undefined -- TODO
->   tanh                =  undefined -- TODO
->   asinh               =  undefined -- TODO
->   acosh               =  undefined -- TODO
->   atanh               =  undefined -- TODO
+>   tan                 =  undefined -- TODO: exercise
+>   asin                =  undefined -- TODO: exercise
+>   acos                =  undefined -- TODO: exercise
+>   atan                =  undefined -- TODO: exercise
+>   sinh                =  undefined -- TODO: exercise
+>   cosh                =  undefined -- TODO: exercise
+>   tanh                =  undefined -- TODO: exercise
+>   asinh               =  undefined -- TODO: exercise
+>   acosh               =  undefined -- TODO: exercise
+>   atanh               =  undefined -- TODO: exercise
 
 
 > newtonFD :: (Ord a, Floating a) => (FD a -> FD a) -> a -> a -> a

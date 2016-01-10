@@ -90,8 +90,8 @@
 >     exp                   =  increasing exp
 >     log                   =  increasing log
 >     sqrt                  =  increasing sqrt
->     (**)                  =  undefined  -- TODO
->     logBase               =  undefined  -- TODO
+>     (**)                  =  undefined  -- TODO: exercise
+>     logBase               =  undefined  -- TODO: exercise
 >     sin x @ (I (xl, xr))
 >       |      splus && sminus  =  I (-1, 1)
 >       |  not splus && sminus  =  I (-1, max (sin xl) (sin xr))
@@ -108,15 +108,15 @@
 >       sminus = floor (inf xminus) /= floor (sup xminus)
 >     cos x                 =  sin (x + toInterval (pi / 2))
 >     tan                   =  increasing tan
->     asin                  =  undefined -- TODO
->     acos                  =  undefined -- TODO
+>     asin                  =  undefined -- TODO: exercise
+>     acos                  =  undefined -- TODO: exercise
 >     atan                  =  increasing atan
->     sinh                  =  undefined -- TODO
->     cosh                  =  undefined -- TODO
->     tanh                  =  undefined -- TODO
->     asinh                 =  undefined -- TODO
->     acosh                 =  undefined -- TODO
->     atanh                 =  undefined -- TODO
+>     sinh                  =  undefined -- TODO: exercise
+>     cosh                  =  undefined -- TODO: exercise
+>     tanh                  =  undefined -- TODO: exercise
+>     asinh                 =  undefined -- TODO: exercise
+>     acosh                 =  undefined -- TODO: exercise
+>     atanh                 =  undefined -- TODO: exercise
 
 > instance Power Interval where
 >   pow x @ (I (xl, xr)) n
