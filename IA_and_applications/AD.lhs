@@ -34,8 +34,8 @@ Having fixed |x0|, we can perform arithmetic operations on |FD a|:
 >   (+) (f, f') (g, g')   =  (f + g, f' + g')
 >   negate (f, f')        =  (-f, -f')
 >   (*) (f, f') (g, g')   =  (f * g, f * g' + f' * g)
->   signum                =  undefined -- TODO: at least an error message
->   abs                   =  undefined -- TODO: at least an error message
+>   signum                =  error "signum for FD"
+>   abs                   =  error "abs for FD"
 >   fromInteger n         =  (fromInteger n, 0)
 
 > instance Fractional a => Fractional (FD a) where
@@ -261,15 +261,15 @@ Using |diff| and |integral|, we have:
 
 > instance (Power a, Floating a) => Floating (HD a) where
 >   pi                    =  con pi
->   exp gs @ (g0 : gs')   =  con (exp g0) + 
+>   exp gs @ (g0 : gs')   =  con (exp g0) +
 >                            integral (diff gs * exp gs)
 >   log                   =  undefined
 >   sqrt                  =  undefined
 >   (**)                  =  undefined
 >   logBase               =  undefined
->   sin gs @ (g0 : gs')   =  con (sin g0) + 
+>   sin gs @ (g0 : gs')   =  con (sin g0) +
 >                            integral (diff gs * cos gs)
->   cos gs @ (g0 : gs')   =  con (cos g0) + 
+>   cos gs @ (g0 : gs')   =  con (cos g0) +
 >                            integral (-diff gs * sin gs)
 >   tan                   =  undefined
 >   asin                  =  undefined
@@ -281,4 +281,3 @@ Using |diff| and |integral|, we have:
 >   asinh                 =  undefined
 >   acosh                 =  undefined
 >   atanh                 =  undefined
-
