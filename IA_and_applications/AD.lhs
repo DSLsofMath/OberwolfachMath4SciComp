@@ -34,8 +34,8 @@ Having fixed |x0|, we can perform arithmetic operations on |FD a|:
 >   (+) (f, f') (g, g')   =  (f + g, f' + g')
 >   negate (f, f')        =  (-f, -f')
 >   (*) (f, f') (g, g')   =  (f * g, f * g' + f' * g)
->   signum                =  error "signum for FD"
->   abs                   =  error "abs for FD"
+>   signum (f, f')        =  (signum f, 0)
+>   abs (f, f')           =  (abs f, signum f * f')
 >   fromInteger n         =  (fromInteger n, 0)
 
 > instance Fractional a => Fractional (FD a) where
@@ -55,7 +55,6 @@ type |FD a|.
 >   sqrt (f, f')        =  let sqrtf = sqrt f in
 >                          (sqrtf, -0.5 * f' * (1 / sqrtf))
 >   (**)                =  undefined -- TODO: exercise
->   logBase             =  undefined -- TODO: exercise
 >   sin (f, f')         =  (sin f, (cos f) * f')
 >   cos (f, f')         =  (cos f, (-sin f) * f')
 >   tan                 =  undefined -- TODO: exercise
@@ -77,19 +76,11 @@ type |FD a|.
 >   where (fx, fx')  =  f (varFD x)
 >         x'         =  x - (fx / fx')
 
-
-> newtonHD :: (Ord a, Floating a) => (HD a -> HD a) -> a -> a -> a
-> newtonHD f tol x
->   | abs (x - x') < tol  =  x'
->   | otherwise           =  newtonHD f tol x'
->   where fs         =  f (var x)
->         (fx, fx')  =  (fs!!0, fs!!1)
->         x'         =  x - (fx / fx')
-
+> foo :: Floating a => a -> a
 > foo x = sin (exp x + 1)
+
+> test1 :: R
 > test1 = newtonFD foo (1e-10) 0
-> test2 :: R
-> test2 = newtonHD foo (1e-10) 0
 
 This works very well, and can be applied with no changes to any
 suitable type (instance of |Floating|), including intervals.  But it has
@@ -281,3 +272,14 @@ Using |diff| and |integral|, we have:
 >   asinh                 =  undefined -- TODO: exercise
 >   acosh                 =  undefined -- TODO: exercise
 >   atanh                 =  undefined -- TODO: exercise
+
+> newtonHD :: (Ord a, Floating a) => (HD a -> HD a) -> a -> a -> a
+> newtonHD f tol x
+>   | abs (x - x') < tol  =  x'
+>   | otherwise           =  newtonHD f tol x'
+>   where fs         =  f (var x)
+>         (fx, fx')  =  (fs!!0, fs!!1)
+>         x'         =  x - (fx / fx')
+
+> test2 :: R
+> test2 = newtonHD foo (1e-10) 0
