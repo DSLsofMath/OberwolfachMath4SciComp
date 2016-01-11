@@ -13,8 +13,14 @@
 >     show (I (a, b)) = "[" ++ show a ++ ", " ++
 >                       show b ++ "]"
 
+
+The infinum (lower bound)
+
 > inf :: Interval -> R
 > inf (I (a, b)) = a
+
+
+The supremum (upper bound)
 
 > sup :: Interval -> R
 > sup (I (a, b)) = b
@@ -40,16 +46,22 @@
 
 > instance Includable R where
 >     isIn         x (I (a, b)) = a <= x && x <= b
->     isInInterior x (I (a, b)) = isIn x (I (a, b)) && a /= b  -- TODO: is x==a OK? (I would have expected a<x && x<b)
+>     isInInterior x (I (a, b)) = a < x && x < b
 
 > instance Includable Interval where
 >     isIn         (I (a1, b1)) (I (a2, b2)) = a2 <= a1 && b1 <= b2
->     isInInterior (I (a1, b1)) (I (a2, b2)) =  a2 < a1 && b1 < b2
+>     isInInterior (I (a1, b1)) (I (a2, b2)) = a2 < a1 && b1 < b2
+
+
+Mignitude: the smallest absolute value in the interval
 
 > mig :: Interval -> R
 > mig (I (a, b)) = if (0::R) `isIn` I (a, b)
 >                     then 0
 >                     else min (abs a) (abs b)
+
+
+Magnitude: the greatest absolute value in the interval
 
 > mag :: Interval -> R
 > mag (I (a, b)) = max (abs a) (abs b)
